@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { Map } from "@/components/index";
 
 export default async function Home() {
   const users = await prisma.users.findMany();
@@ -12,6 +13,7 @@ export default async function Home() {
             id: {user.id}, name: {user.name}
           </div>
         ))}
+        <Map />
       </main>
     </div>
   );
