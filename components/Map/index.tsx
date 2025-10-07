@@ -1,7 +1,7 @@
 "use client";
 import mapboxgl from "mapbox-gl";
 import { useEffect, useRef } from "react";
-import Controls from "./Controls";
+import Tools from "./tools";
 
 export default function Map() {
   const mapRef = useRef<mapboxgl.Map>(null);
@@ -21,7 +21,7 @@ export default function Map() {
   return (
     <>
       <div id="map" style={{ width: 600, height: 300 }}></div>
-      <Controls mapRef={mapRef} />
+      <Tools mapRef={mapRef} />
     </>
   );
 }

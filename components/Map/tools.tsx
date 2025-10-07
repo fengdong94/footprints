@@ -2,7 +2,7 @@ import { RefObject } from "react";
 
 type ControlsProps = { mapRef: RefObject<mapboxgl.Map | null> };
 
-export default function Controls({ mapRef }: ControlsProps) {
+export default function Tools({ mapRef }: ControlsProps) {
   return (
     <div>
       <button
