@@ -8,9 +8,16 @@ import { State } from "@/actions/signup-login";
 type LoginFormProps = {
   errors: State["errors"];
   formAction: (payload: FormData) => void;
+  msg?: string;
+  success?: boolean;
 };
 
-export default function LoginForm({ errors, formAction }: LoginFormProps) {
+export default function LoginForm({
+  errors,
+  formAction,
+  success,
+  msg,
+}: LoginFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const disabled = !email || !password;
@@ -81,6 +88,9 @@ export default function LoginForm({ errors, formAction }: LoginFormProps) {
         >
           {isLogin ? "Log In" : "Create Account"}
         </button>
+        <div aria-live="polite" aria-atomic="true">
+          {!success && msg && <p className="my-2 text-center text-red-500">{msg}</p>}
+        </div>
       </form>
       {/* <div className="relative my-6">
             <div

@@ -1,11 +1,17 @@
 "use server";
 
+// TODO restrict times of sending emails from the same user (Rate Limiting)
 // TODO purchase mail domain, change to resend?
+// TODO forget password?
+// TODO 每个接口/server action 验证cookie？失败统一跳到登录页？路由拦截？
 
-// import { redirect } from 'next/navigation';
+import jwt from "jsonwebtoken";
 import { z } from "zod";
-const nodemailer = require("nodemailer");
+import nodemailer from "nodemailer";
+import bcrypt from "bcrypt";
+import { redirect } from "next/navigation";
 import { LoginSchema } from "@/lib/from-schemas";
+import prisma from "@/lib/prisma";
 
 export type State = {
   errors?: {
@@ -13,8 +19,18 @@ export type State = {
     password?: string[];
   };
   success?: boolean;
-  message?: string;
+  msg?: string;
 };
+
+type JwtPayload = {
+  type: string;
+  email: string;
+  password: string;
+  iat: number;
+  exp: number;
+};
+
+const SALT_ROUNDS = 10;
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -24,67 +40,92 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export async function signup(prevState: State, formData: FormData) {
+export async function signup(
+  prevState: State,
+  formData: FormData
+): Promise<State> {
   const result = LoginSchema.safeParse(Object.fromEntries(formData.entries()));
 
   if (!result.success) {
     return { errors: z.flattenError(result.error).fieldErrors };
   }
 
-  const { email } = result.data;
+  const { email, password } = result.data;
+
+  const user = await prisma.users.findUnique({ where: { email } });
+  if (user) {
+    return { msg: "This email has already been signed up." };
+  }
+
+  // TODO link domain: dev/prod
+  const token = jwt.sign(
+    { type: "email_verification", email, password },
+    process.env.JWT_SECRET!,
+    { expiresIn: 60 * 15 } // 15 minutes, reduce the risk of replay attack
+  );
 
   // send a verification email
-  const info = await transporter.sendMail({
+  await transporter.sendMail({
     from: '"Footprints" <fengdong9446@gmail.com>',
     to: email,
-    subject: "Hello ✔",
-    text: "Hello world?",
-    html: "<b>Hello world? HTML</b>",
+    subject: "Confirm your Footprints account",
+    html: `<div style='text-align: center'><h3>Confirm Your Account</h3><p>Thank you for signing up for Footprints. To confirm your account, pleaseclick the button below.</p><a style='display: inline-block;width: 150px;height: 32px;background: #0b7dda;color: #fff;text-decoration: none;line-height: 32px;border-radius: 8px;'href='http://localhost:3000/confirm-account?token=${token}'>Confirm Account</a></div>`,
   });
-
-  console.log("info", info);
 
   return {
     success: true,
-    message: `We just sent a verification link to ${email}.`,
+    msg: `We just sent a verification link to ${email}.`,
   };
-
-  // https://resend.com/auth/confirm-account?token=62154711bc3da7298936ec25a88bc2e147bb90c590799fe3c3df46a2&redirect_to=/onboarding
 }
 
-export async function login(prevState: State, formData: FormData) {
+export async function login(
+  prevState: State,
+  formData: FormData
+): Promise<State> {
   const result = LoginSchema.safeParse(Object.fromEntries(formData.entries()));
 
   if (!result.success) {
     return { errors: z.flattenError(result.error).fieldErrors };
   }
 
-  // authenticate, call signin in auth.ts
-
-  return {
-    success: true,
-    message: `We just sent a verification link tox`,
-  };
-
-  // redirect('/home');
+  const { email, password } = result.data;
+  const user = await prisma.users.findUnique({ where: { email } });
+  if (user) {
+    const isValid = await bcrypt.compare(password, user.password);
+    if (isValid) {
+      // TODO set cookie
+      redirect("/");
+    } else {
+      return { msg: "Your password is incorrect." };
+    }
+  } else {
+    return { msg: "This email has not been signed up." };
+  }
 }
 
-// info {
-//   accepted: [ 'fengdong94@163.com' ],
-//   rejected: [],
-//   ehlo: [
-//     'SIZE 35882577',
-//     '8BITMIME',
-//     'AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH',
-//     'ENHANCEDSTATUSCODES',
-//     'PIPELINING',
-//     'CHUNKING',
-//     'SMTPUTF8'
-//   ],
-//   envelopeTime: 1009,
-//   messageTime: 826,
-//   messageSize: 607,
-//   response: '250 2.0.0 OK  1759878162 ffacd0b85a97d-4255d8e97f0sm26928926f8f.27 - gsmtp',
-//   envelope: { from: 'fengdong9446@gmail.com', to: [ 'fengdong94@163.com' ] },
-//   messageId: '<ceb721a3-35d4-f8e3-fd36-c321947f1930@gmail.com>'
-// }
+export async function confirmAccount(token: string) {
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+    const { type, email, password } = decoded;
+
+    if (type !== "email_verification") {
+      return { msg: "Invalid token type." };
+    }
+
+    const user = await prisma.users.findUnique({ where: { email } });
+
+    if (user) {
+      return { msg: "This email has already been signed up." };
+    } else {
+      const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+      await prisma.users.create({ data: { email, password: hashedPassword } });
+      // TODO set cookie?
+      return { success: true };
+    }
+  } catch (e) {
+    if (e instanceof jwt.TokenExpiredError) {
+      return { msg: "The verification link is expired." };
+    }
+    return { msg: "Verification failed" };
+  }
+}

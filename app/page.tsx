@@ -9,8 +9,8 @@ export default async function Home() {
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         user list:
         {users.map((user) => (
-          <div key={user.id}>
-            id: {user.id}, name: {user.name}
+          <div key={user.email}>
+            email: {user.email}, name: {user.name}
           </div>
         ))}
         <Map />

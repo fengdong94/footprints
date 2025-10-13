@@ -4,10 +4,10 @@ import { useActionState } from "react";
 import { signup, State } from "@/actions/signup-login";
 import LoginForm from "../components/login-form";
 
-// TODO go to login button
+// TODO go to login button, email icon top "Check your email"
 export default function Signup() {
   const initialState: State = {};
-  const [{ success, message, errors }, formAction] = useActionState(
+  const [{ success, msg, errors }, formAction] = useActionState(
     signup,
     initialState
   );
@@ -16,10 +16,17 @@ export default function Signup() {
     return (
       <div className="text-center">
         <p className="text-2xl font-bold mb-2">Check your email</p>
-        {message}
+        {msg}
       </div>
     );
   }
 
-  return <LoginForm errors={errors} formAction={formAction} />;
+  return (
+    <LoginForm
+      errors={errors}
+      formAction={formAction}
+      success={success}
+      msg={msg}
+    />
+  );
 }

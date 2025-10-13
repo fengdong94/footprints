@@ -6,6 +6,6 @@ import LoginForm from "../components/login-form";
 
 export default function Login() {
   const initialState: State = {};
-  const [{ errors }, formAction] = useActionState(login, initialState);
-  return <LoginForm errors={errors} formAction={formAction} />;
+  const [{ errors, success, msg }, formAction] = useActionState(login, initialState);
+  return <LoginForm errors={errors} formAction={formAction} success={success} msg={msg} />;
 }
