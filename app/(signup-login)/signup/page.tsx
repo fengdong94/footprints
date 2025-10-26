@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import { signup, State } from "@/actions/signup-login";
-import LoginForm from "../components/login-form";
+import LoginForm from "../login-form";
 
 // TODO go to login button, email icon top "Check your email"
 export default function Signup() {

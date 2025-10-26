@@ -17,7 +17,7 @@ export function middleware(request: NextRequest) {
   }
 
   const token = request.cookies.get("auth_token")?.value;
-  const isProtectedPath = pathname === "/";
+  const isProtectedPath = ["/", "/profile"].includes(pathname);
   if (isProtectedPath) {
     if (!token) {
       const url = request.nextUrl.clone();
