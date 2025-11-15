@@ -1,122 +1,53 @@
 "use client";
 
-import mapboxgl, { LngLatLike } from "mapbox-gl";
-import { center, centroid } from "@turf/turf";
+import mapboxgl from "mapbox-gl";
 import { useEffect, useRef, useContext, useState } from "react";
 import Tools from "./tools";
+import {
+  useSetCountryList,
+  usePrevious,
+  useHighlight,
+  useClick,
+} from "./custom-hooks";
+import PopUp from "./pop-up";
 import CountrySelector from "./country-selector";
 import { CountryListContext, Country } from "../../page";
 
 export default function Map() {
-  const { setCountryList } = useContext(CountryListContext);
+  const { setCountryList, countryList } = useContext(CountryListContext);
   const [selectedCountry, setSelectedCountry] = useState<Country>();
+  const preCountry = usePrevious(selectedCountry);
   const mapRef = useRef<mapboxgl.Map>(null);
 
+  // initialize the map
   useEffect(() => {
     mapboxgl.accessToken =
-      "pk.eyJ1IjoiZmVuZ2RvbmciLCJhIjoiY21nY3Zxa3g5MHY5cDJrcXU4MnowNWsycCJ9.7Wwc21v57NqiZe6AsvUIoQ";
+      "pk.eyJ1IjoiZmVuZ2RvbmciLCJhIjoiY21oZmY4amVwMDRrdjJqczc2YnB6d2M3bCJ9.fGVMghfQ1iBc7KGon0oIFg";
     mapRef.current = new mapboxgl.Map({
       container: "map",
-      style: "mapbox://styles/fengdong/cmhanktxg000501s9gome7wgc",
+      style: "mapbox://styles/fengdong/cmi07p3co00cw01r46ofk9134",
       center: [-74.5, 40],
       zoom: 0,
       projection: "mercator", // 2D: mercator, 3D: globe
     });
 
     mapRef.current.on("load", () => {
-      mapRef.current!.addSource("country-boundaries", {
-        type: "vector",
-        url: "mapbox://mapbox.country-boundaries-v1",
-      });
-
-      mapRef.current!.addLayer({
-        id: "country-boundaries",
-        source: "country-boundaries",
-        "source-layer": "country_boundaries",
-        type: "fill",
-        filter: [
-          "all",
-          ["==", ["get", "disputed"], "false"],
-          [
-            "any",
-            ["==", "all", ["get", "worldview"]],
-            ["in", "CN", ["get", "worldview"]],
-          ],
-        ],
-        paint: {
-          "fill-color": [
-            "case",
-            ["boolean", ["feature-state", "highlight"], false],
-            "rgba(100,200,251, 0.3)", // highlight
-            "rgba(200,100,251, 0.3)", // default
-          ],
-          "fill-outline-color": "#ff0000",
-        },
-      });
-
-      mapRef.current!.on("click", (e) => {
-        const features = mapRef.current!.queryRenderedFeatures(e.point);
-        console.log("clicked country features", features);
-
-        features.forEach((feature) => {
-          if (feature.layer?.id === "country-boundaries") {
-            mapRef.current!.setFeatureState(
-              {
-                source: feature.layer.source!,
-                sourceLayer: feature.layer["source-layer"],
-                id: feature.id!,
-              },
-              {
-                highlight: true,
-              }
-            );
-          }
-        });
-      });
-    });
-
-    mapRef.current.once("idle", () => {
-      // Query all rendered features from country-boundaries layer to get CountryList data
-      const allFeatures = mapRef.current!.queryRenderedFeatures({
-        target: { layerId: "country-boundaries" },
-      });
-      // Filter duplicated data
-      const idSet = new Set();
-      const countryList: Country[] = [];
-      allFeatures.forEach(({ properties, geometry }) => {
-        const { mapbox_id, name_en, region, subregion } = properties;
-        if (!idSet.has(mapbox_id)) {
-          idSet.add(mapbox_id);
-          countryList.push({
-            name_en: name_en as string,
-            region: region as string,
-            subregion: subregion as string,
-            geometry,
-          });
-        }
-      });
-      setCountryList(countryList);
+      // TODO remove
+      console.log("layer place-label", mapRef.current!.getLayer("place-label"));
+      console.log(
+        "layer country-boundaries",
+        mapRef.current!.getLayer("country-boundaries")
+      );
     });
 
     return () => mapRef.current!.remove();
-  }, [setCountryList]);
+  }, []);
 
-  // When select a country, show this country on the map
-  useEffect(() => {
-    if (!selectedCountry) return;
-    // const bounds = bbox(selectedCountry.geometry);
-    const centerCoordinates = centroid(selectedCountry.geometry).geometry
-      .coordinates;
-    mapRef.current?.flyTo({
-      center: centerCoordinates as LngLatLike,
-      zoom: 2.2,
-    });
-    // mapRef.current?.fitBounds(bounds as [number, number, number, number], {
-    //   padding: 50,
-    //   duration: 1500,
-    //   maxZoom: 4,
-    // });
-  }, [selectedCountry]);
+  useSetCountryList(mapRef, setCountryList);
+  // TODO
+  // useHover(mapRef);
+  useClick(mapRef, countryList, setSelectedCountry);
+  useHighlight(mapRef, selectedCountry, preCountry);
 
   return (
     <>
@@ -127,6 +58,7 @@ export default function Map() {
         value={selectedCountry}
         onChange={setSelectedCountry}
       />
+      <PopUp />
     </>
   );
 }

@@ -17,6 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import flags from "@/lib/flags";
 import { CountryListContext, Country } from "../../page";
 
 type CountrySelectorProps = {
@@ -30,7 +31,7 @@ export default function CountrySelector({
   value,
   onChange,
 }: CountrySelectorProps) {
-  const { name_en } = value || {};
+  const { name_en, iso_3166_1 } = value || {};
   const [open, setOpen] = useState(false);
   const { countryList } = useContext(CountryListContext);
 
@@ -61,7 +62,13 @@ export default function CountrySelector({
             aria-expanded={open}
             className="w-[200px] justify-between"
           >
-            {name_en || "Select country/region"}
+            {value ? (
+              <>
+                {flags[iso_3166_1!].emoji} {name_en}
+              </>
+            ) : (
+              "Select country/region"
+            )}
             <ChevronsUpDown className="opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -72,7 +79,7 @@ export default function CountrySelector({
               className="h-9"
             />
             <CommandList>
-              <CommandEmpty>No framework found.</CommandEmpty>
+              <CommandEmpty>No country/region found.</CommandEmpty>
               {countriesByRegion.map(([region, countryList]) => (
                 <CommandGroup key={region} heading={region}>
                   {countryList.map((country) => (
@@ -88,7 +95,7 @@ export default function CountrySelector({
                         setOpen(false);
                       }}
                     >
-                      {country.name_en}
+                      {flags[country.iso_3166_1].emoji} {country.name_en}
                       <Check
                         className={cn(
                           "ml-auto",

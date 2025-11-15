@@ -8,9 +8,19 @@ datasource db {
 }
 
 model users {
-  email    String  @id
-  password String
-  name     String?
-  avatar   String?
-  bio      String?
+  email      String       @id
+  password   String
+  name       String?
+  avatar     String?
+  bio        String?
+  footprints footprints[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model footprints {
+  id           BigInt @id @default(autoincrement())
+  user_email   String
+  country_name String
+  type         String
+  users        users  @relation(fields: [user_email], references: [email], onDelete: Cascade, onUpdate: NoAction)
 }
