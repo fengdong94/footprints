@@ -1,7 +1,7 @@
 import { useEffect, useRef, RefObject } from "react";
 import { centroid } from "@turf/turf";
+import { Country } from "@/lib/types";
 import { LngLatLike } from "mapbox-gl";
-import { Country } from "../../page";
 
 export function usePrevious<T>(value: T) {
   const ref = useRef(value);

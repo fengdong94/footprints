@@ -1,6 +1,6 @@
 "use client";
 
-import { RefObject, useContext, useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -18,16 +18,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import flags from "@/lib/flags";
-import { CountryListContext, Country } from "../../page";
+import { Country } from "@/lib/types";
+import { CountryListContext } from "../context";
 
 type CountrySelectorProps = {
-  mapRef: RefObject<mapboxgl.Map | null>;
   value?: Country;
   onChange: (value?: Country) => void;
 };
 
 export default function CountrySelector({
-  mapRef,
   value,
   onChange,
 }: CountrySelectorProps) {

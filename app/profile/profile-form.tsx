@@ -4,7 +4,8 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
-import { updateProfile, User, State } from "@/actions/user";
+import { updateProfile, State } from "@/actions/user";
+import { User } from "@/lib/types";
 
 export default function ProfileForm({ initialData }: { initialData: User }) {
   const initialState: State = {};
