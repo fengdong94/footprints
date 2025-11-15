@@ -94,7 +94,7 @@ export default function CountrySelector({
                         setOpen(false);
                       }}
                     >
-                      {flags[country.iso_3166_1].emoji} {country.name_en}
+                      {flags[country.iso_3166_1]?.emoji} {country.name_en}
                       <Check
                         className={cn(
                           "ml-auto",

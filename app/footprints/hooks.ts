@@ -1,6 +1,6 @@
 import { useEffect, useRef, RefObject } from "react";
 import { centroid } from "@turf/turf";
-import { Country } from "@/lib/types";
+import { Country, Footprint } from "@/lib/types";
 import { LngLatLike } from "mapbox-gl";
 
 export function usePrevious<T>(value: T) {
@@ -58,7 +58,7 @@ export function useHighlight(
           sourceLayer: "country_boundaries",
           id: selectedCountry.id,
         },
-        { highlight: true }
+        { selected: true }
       );
 
       const centerCoordinates = centroid(selectedCountry.geometry).geometry
@@ -82,7 +82,7 @@ export function useHighlight(
           sourceLayer: "country_boundaries",
           id: prevCountry.id,
         },
-        { highlight: false }
+        { selected: false }
       );
     }
   }, [mapRef, prevCountry?.id, selectedCountry]);
@@ -139,4 +139,26 @@ export function useHover(mapRef: RefObject<mapboxgl.Map | null>) {
     //   }
     // });
   }, [mapRef]);
+}
+
+// highlight footprints (visited & wishlist)
+export function useFootprints(
+  mapRef: RefObject<mapboxgl.Map | null>,
+  footprints: Footprint[],
+  countryMap: Record<string, Country>
+) {
+  useEffect(() => {
+    footprints.forEach(({ country_name, type }) => {
+      if (countryMap[country_name]?.id) {
+        mapRef.current!.setFeatureState(
+          {
+            source: "composite",
+            sourceLayer: "country_boundaries",
+            id: countryMap[country_name].id,
+          },
+          { [type]: true }
+        );
+      }
+    });
+  }, [countryMap, footprints, mapRef]);
 }

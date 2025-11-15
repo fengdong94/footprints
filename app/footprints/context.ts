@@ -5,5 +5,6 @@ import { Country } from "@/lib/types";
 
 export const CountryListContext = createContext<{
   countryList: Country[];
+  countryMap: Record<string, Country>;
   setCountryList: (data: Country[]) => void;
-}>({ countryList: [], setCountryList: () => null });
+}>({ countryList: [], countryMap: {}, setCountryList: () => null });

@@ -21,9 +21,8 @@ export default function Signup() {
             const res = await confirmAccount(token || "");
             if (res.success) {
               // non-form actions can't redirect in server actions, only can redirect in client
-              // TODO profile?
               // TODO loading
-              redirect("/");
+              redirect("/profile");
             } else {
               setErrorMsg(res.msg);
             }
