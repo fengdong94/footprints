@@ -38,7 +38,9 @@ export default function Footprints({ footprints }: FootprintsProps) {
       />
       <Tools mapRef={mapRef} />
       <CountrySelector value={selectedCountry} onChange={setSelectedCountry} />
-      {selectedCountry && <PopUp selectedCountry={selectedCountry} />}
+      {selectedCountry && (
+        <PopUp selectedCountry={selectedCountry} footprints={footprints} />
+      )}
     </CountryListContext>
   );
 }

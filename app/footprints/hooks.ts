@@ -156,6 +156,7 @@ export function useFootprints(
             sourceLayer: "country_boundaries",
             id: countryMap[country_name].id,
           },
+          // TODO when update another type should be set to false
           { [type]: true }
         );
       }
