@@ -3,7 +3,14 @@
 import { useMemo, useState, useRef } from "react";
 import { Country, Footprint } from "@/lib/types";
 import { CountryListContext } from "./context";
-import { Map, PopUp, CountrySelector, Tools } from "./components";
+import {
+  Map,
+  PopUp,
+  CountrySelector,
+  Tools,
+  Visited,
+  Wishlist,
+} from "./components";
 import { usePrevious } from "./hooks";
 
 type FootprintsProps = {
@@ -27,6 +34,19 @@ export default function Footprints({ footprints }: FootprintsProps) {
 
   console.log("my footprints", footprints);
 
+  // TODO visited/wishlist countries go into map directly
+  const { visitedCountries, wishlistCountries } = useMemo(() => {
+    const visitedCountries: Country[] = [];
+    const wishlistCountries: Country[] = [];
+    footprints.forEach(({ type, country_name }) => {
+      const country = value.countryMap[country_name];
+      if (!country) return;
+      if (type === "visited") visitedCountries.push(country);
+      if (type === "wishlist") wishlistCountries.push(country);
+    });
+    return { visitedCountries, wishlistCountries };
+  }, [footprints, value]);
+
   return (
     <CountryListContext value={value}>
       <Map
@@ -41,6 +61,8 @@ export default function Footprints({ footprints }: FootprintsProps) {
       {selectedCountry && (
         <PopUp selectedCountry={selectedCountry} footprints={footprints} />
       )}
+      <Visited countries={visitedCountries} />
+      <Wishlist countries={wishlistCountries} />
     </CountryListContext>
   );
 }

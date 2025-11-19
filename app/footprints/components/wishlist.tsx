@@ -1,0 +1,31 @@
+"use client";
+
+import { Heart } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Country } from "@/lib/types";
+import IconButton from "./icon-button";
+import CountryList from "./country-list";
+
+type WishlistProps = {
+  countries: Country[];
+};
+
+export default function Wishlist({ countries }: WishlistProps) {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <div className="fixed top-1/2 left-4">
+          <IconButton icon={<Heart />} text="wishlist" />
+        </div>
+      </PopoverTrigger>
+      <PopoverContent side="right" className="w-80">
+        <h4 className="mb-4 text-sm leading-none font-medium">Wishlist Countries</h4>
+        <CountryList countryList={countries} />
+      </PopoverContent>
+    </Popover>
+  );
+}
