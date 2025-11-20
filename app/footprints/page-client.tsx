@@ -10,6 +10,8 @@ import {
   Tools,
   Visited,
   Wishlist,
+  Achievement,
+  Leaderboard,
 } from "./components";
 import { usePrevious } from "./hooks";
 
@@ -63,6 +65,8 @@ export default function Footprints({ footprints }: FootprintsProps) {
       )}
       <Visited countries={visitedCountries} />
       <Wishlist countries={wishlistCountries} />
+      <Achievement countries={visitedCountries} />
+      <Leaderboard />
     </CountryListContext>
   );
 }

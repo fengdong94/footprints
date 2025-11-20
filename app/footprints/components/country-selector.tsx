@@ -39,6 +39,7 @@ export default function CountrySelector({
     countryList.forEach((country) => {
       const region = country.region;
       if (region === "Americas") {
+        // TODO south america?
         // Separate "Americas" to subregions: "Northern America" and "Latin America and the Caribbean"
         const subregion = country.subregion;
         if (!data[subregion]) data[subregion] = [];

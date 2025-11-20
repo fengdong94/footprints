@@ -9,6 +9,7 @@ type CountryListProps = {
   countryList: Country[];
 };
 
+// TODO click country then select it, delete country, sort by visit time, edit button(upload images/text)?
 export default function CountryList({ countryList }: CountryListProps) {
   return (
     <ScrollArea className="h-72 w-48 rounded-md border">

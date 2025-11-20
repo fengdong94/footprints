@@ -14,11 +14,12 @@ type WishlistProps = {
   countries: Country[];
 };
 
+// TODO show wishlist number in button?
 export default function Wishlist({ countries }: WishlistProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div className="fixed top-1/2 left-4">
+        <div className="fixed top-2/5 left-4">
           <IconButton icon={<Heart />} text="wishlist" />
         </div>
       </PopoverTrigger>

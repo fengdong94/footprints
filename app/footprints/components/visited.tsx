@@ -14,11 +14,12 @@ type VisitedProps = {
   countries: Country[];
 };
 
+// TODO show visited number in button?
 export default function Visited({ countries }: VisitedProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div className="fixed top-1/3 left-4">
+        <div className="fixed top-1/5 left-4">
           <IconButton icon={<Footprints />} text="visited" />
         </div>
       </PopoverTrigger>
