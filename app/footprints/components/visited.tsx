@@ -20,7 +20,7 @@ export default function Visited({ countries }: VisitedProps) {
     <Popover>
       <PopoverTrigger asChild>
         <div className="fixed top-1/5 left-3">
-          <IconButton icon={<Footprints />} label="visited" />
+          <IconButton icon={<Footprints />} label="visited" styleClass="text-teal-700 bg-teal-50" />
         </div>
       </PopoverTrigger>
       <PopoverContent side="right" className="w-80">

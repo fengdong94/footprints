@@ -19,7 +19,7 @@ export default function Leaderboard() {
     <Popover>
       <PopoverTrigger asChild>
         <div className="fixed top-4/5 left-3">
-          <IconButton icon={<ListOrdered />} label="ranking" />
+          <IconButton icon={<ListOrdered />} label="ranking" styleClass="text-blue-500 bg-blue-50" />
         </div>
       </PopoverTrigger>
       <PopoverContent side="right" className="w-80">

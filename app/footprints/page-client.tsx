@@ -20,6 +20,7 @@ type FootprintsProps = {
 };
 
 export default function Footprints({ footprints }: FootprintsProps) {
+  // TODO no antarctic
   const [countryList, setCountryList] = useState<Country[]>([]);
   const value = useMemo(() => {
     const countryMap: Record<string, Country> = {};

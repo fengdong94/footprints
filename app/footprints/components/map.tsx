@@ -29,9 +29,9 @@ export default function Map({
       "pk.eyJ1IjoiZmVuZ2RvbmciLCJhIjoiY21oZmY4amVwMDRrdjJqczc2YnB6d2M3bCJ9.fGVMghfQ1iBc7KGon0oIFg";
     mapRef.current = new mapboxgl.Map({
       container: "map",
-      style: "mapbox://styles/fengdong/cmi0v80mr005x01qx7mabfsrn",
-      center: [-74.5, 40],
-      zoom: 0,
+      style: "mapbox://styles/fengdong/cmi9f8eqx00co01s91tvuhq78",
+      center: [20, 26],
+      zoom: 1.5,
       projection: "mercator", // 2D: mercator, 3D: globe
     });
 

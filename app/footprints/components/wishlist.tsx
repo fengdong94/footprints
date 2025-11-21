@@ -20,7 +20,7 @@ export default function Wishlist({ countries }: WishlistProps) {
     <Popover>
       <PopoverTrigger asChild>
         <div className="fixed top-2/5 left-3">
-          <IconButton icon={<Heart />} label="wishlist" />
+          <IconButton icon={<Heart />} label="wishlist" styleClass="text-pink-600 bg-pink-50" />
         </div>
       </PopoverTrigger>
       <PopoverContent side="right" className="w-80">

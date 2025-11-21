@@ -80,7 +80,7 @@ export default function Achievement({ countries }: AchievementProps) {
     <Drawer direction="left">
       <DrawerTrigger asChild>
         <div className="fixed top-3/5 left-3">
-          <IconButton icon={<Award />} label="badges" />
+          <IconButton icon={<Award />} label="badges" styleClass="text-yellow-500 bg-yellow-50" />
         </div>
       </DrawerTrigger>
       <DrawerContent>
