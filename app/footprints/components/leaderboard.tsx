@@ -7,7 +7,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 // import { Country } from "@/lib/types";
-import IconButton from "./icon-button";
+import IconButton from "@/components/ui/icon-button";
 
 // type LeaderboardProps = {
 //   countries: Country[];
@@ -18,8 +18,8 @@ export default function Leaderboard() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div className="fixed top-4/5 left-4">
-          <IconButton icon={<ListOrdered />} text="leaderboard" />
+        <div className="fixed top-4/5 left-3">
+          <IconButton icon={<ListOrdered />} label="ranking" />
         </div>
       </PopoverTrigger>
       <PopoverContent side="right" className="w-80">

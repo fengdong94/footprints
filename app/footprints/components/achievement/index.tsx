@@ -10,6 +10,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import IconButton from "@/components/ui/icon-button";
 import { Country } from "@/lib/types";
 import {
   ACHIEVEMENT_RULES_MILESTONE,
@@ -18,7 +19,6 @@ import {
   ACHIEVEMENT_RULES_SIDE_QUESTS,
 } from "@/lib/achievement-rules";
 import AchievementCard from "./achievement-card";
-import IconButton from "../icon-button";
 
 type AchievementProps = {
   countries: Country[];
@@ -79,8 +79,8 @@ export default function Achievement({ countries }: AchievementProps) {
   return (
     <Drawer direction="left">
       <DrawerTrigger asChild>
-        <div className="fixed top-3/5 left-4">
-          <IconButton icon={<Award />} text="achievement" />
+        <div className="fixed top-3/5 left-3">
+          <IconButton icon={<Award />} label="badges" />
         </div>
       </DrawerTrigger>
       <DrawerContent>

@@ -53,7 +53,7 @@ export default function CountrySelector({
   }, [countryList]);
 
   return (
-    <div className="fixed top-2 right-2">
+    <div className="fixed top-6 right-3 shadow-[0_8px_30px_rgb(0,0,0,0.12)] ">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
