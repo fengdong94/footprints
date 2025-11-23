@@ -8,21 +8,23 @@ datasource db {
 }
 
 model users {
-  email      String       @id
-  password   String
-  name       String?
-  avatar     String?
-  bio        String?
-  footprints footprints[]
+  email       String       @id
+  password    String
+  name        String?
+  avatar      String?
+  bio         String?
+  nationality String?
+  footprints  footprints[]
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model footprints {
-  id           BigInt      @id @default(autoincrement())
   user_email   String
   country_name String
   type         type_status
   users        users       @relation(fields: [user_email], references: [email], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([user_email, country_name])
 }
 
 enum type_status {

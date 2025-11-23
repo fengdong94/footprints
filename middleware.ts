@@ -17,7 +17,7 @@ export function middleware(request: NextRequest) {
   }
 
   const token = request.cookies.get("auth_token")?.value;
-  const isProtectedPath = ["/profile", "/footprints"].includes(pathname);
+  const isProtectedPath = ["/profile", "/map"].includes(pathname);
   if (isProtectedPath) {
     if (!token) {
       const url = request.nextUrl.clone();
@@ -32,8 +32,8 @@ export function middleware(request: NextRequest) {
   }
 
   if (token && pathname.startsWith("/login")) {
-    // if user has already loged in and visit login page, redirect to "/footprints"
-    return NextResponse.redirect(new URL("/footprints", request.url));
+    // if user has already loged in and visit login page, redirect to "/map"
+    return NextResponse.redirect(new URL("/map", request.url));
   }
 
   return NextResponse.next();

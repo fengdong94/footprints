@@ -17,7 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import flags from "@/lib/flags";
+import { getFlagByISO } from "@/lib/utils";
 import { Country } from "@/lib/types";
 import { CountryListContext } from "../context";
 
@@ -64,7 +64,7 @@ export default function CountrySelector({
           >
             {value ? (
               <>
-                {flags[iso_3166_1!].emoji} {name_en}
+                {getFlagByISO(iso_3166_1)} {name_en}
               </>
             ) : (
               "Select country/region"
@@ -95,7 +95,7 @@ export default function CountrySelector({
                         setOpen(false);
                       }}
                     >
-                      {flags[country.iso_3166_1]?.emoji} {country.name_en}
+                      {getFlagByISO(country.iso_3166_1)} {country.name_en}
                       <Check
                         className={cn(
                           "ml-auto",

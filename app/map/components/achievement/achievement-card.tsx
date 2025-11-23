@@ -62,9 +62,7 @@ const AchievementCard = ({
           {icon}
         </div>
         <div>
-          <h3 className={`font-bold leading-tight mb-1 ${activeStyle.text}`}>
-            {title}
-          </h3>
+          <p className={`text-sm font-bold mb-1 ${activeStyle.text}`}>{title}</p>
           {/* TODO space & ellipsis */}
           <p className="text-xs text-gray-500 line-clamp-2">{description}</p>
         </div>

@@ -1,33 +1,13 @@
 "use server";
 
-import jwt from "jsonwebtoken";
 import { z } from "zod";
-import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 // import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import cloudinary from "@/lib/cloudinary";
+import { getEmail } from "@/lib/db";
 
 import { ProfileSchema } from "@/lib/from-schemas";
-
-export const getEmail = async () => {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("auth_token")?.value;
-  // TODO redirect
-  if (!token) {
-    return;
-  }
-  const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
-    email: string;
-  };
-  return decoded.email;
-};
-
-export const getUser = async () => {
-  const email = await getEmail();
-  const user = await prisma.users.findUnique({ where: { email } });
-  return user;
-};
 
 export type State = {
   errors?: {

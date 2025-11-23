@@ -1,4 +1,4 @@
-import { getUser } from "@/actions/user";
+import { getUser } from "@/lib/db";
 import ProfileForm from "./profile-form";
 
 // TODO force-dynamic ?

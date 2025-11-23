@@ -105,7 +105,7 @@ export async function login(
         path: "/",
       });
 
-      redirect("/footprints");
+      redirect("/map");
     } else {
       return { msg: "Your password is incorrect." };
     }

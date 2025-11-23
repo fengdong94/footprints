@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useRef } from "react";
-import { Country, Footprint } from "@/lib/types";
+import { Country, Footprint, User } from "@/lib/types";
 import { CountryListContext } from "./context";
 import {
   Map,
@@ -12,14 +12,16 @@ import {
   Wishlist,
   Achievement,
   Leaderboard,
+  ProfileLink,
 } from "./components";
 import { usePrevious } from "./hooks";
 
 type FootprintsProps = {
   footprints: Footprint[];
+  user: User;
 };
 
-export default function Footprints({ footprints }: FootprintsProps) {
+export default function Footprints({ footprints, user }: FootprintsProps) {
   // TODO no antarctic
   const [countryList, setCountryList] = useState<Country[]>([]);
   const value = useMemo(() => {
@@ -34,8 +36,6 @@ export default function Footprints({ footprints }: FootprintsProps) {
   const prevCountry = usePrevious(selectedCountry);
 
   const mapRef = useRef<mapboxgl.Map>(null);
-
-  console.log("my footprints", footprints);
 
   // TODO visited/wishlist countries go into map directly
   const { visitedCountries, wishlistCountries } = useMemo(() => {
@@ -68,6 +68,7 @@ export default function Footprints({ footprints }: FootprintsProps) {
       <Wishlist countries={wishlistCountries} />
       <Achievement countries={visitedCountries} />
       <Leaderboard />
+      <ProfileLink user={user} />
     </CountryListContext>
   );
 }

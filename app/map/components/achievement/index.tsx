@@ -79,13 +79,13 @@ export default function Achievement({ countries }: AchievementProps) {
   return (
     <Drawer direction="left">
       <DrawerTrigger asChild>
-        <div className="fixed top-3/5 left-3">
+        <div className="fixed top-3/6 left-3">
           <IconButton icon={<Award />} label="badges" styleClass="text-yellow-500 bg-yellow-50" />
         </div>
       </DrawerTrigger>
       <DrawerContent>
         <ScrollArea className="p-4 max-h-screen">
-          <DrawerTitle className="text-xl">Your Achievements</DrawerTitle>
+          <DrawerTitle className="text-lg">Your Achievements</DrawerTitle>
           {renderData.map(({ title, achievements }) => (
             <Fragment key={title}>
               <h2 className="font-bold text-gray-800 mb-4 mt-4">{title}</h2>
