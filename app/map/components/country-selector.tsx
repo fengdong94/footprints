@@ -60,7 +60,7 @@ export default function CountrySelector({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-[200px] justify-between cursor-pointer"
+            className="w-[220px] justify-between cursor-pointer"
           >
             {value ? (
               <>
@@ -72,7 +72,7 @@ export default function CountrySelector({
             <ChevronsUpDown className="opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[200px] p-0">
+        <PopoverContent className="w-[220px] p-0">
           <Command>
             <CommandInput
               placeholder="Search country/region..."

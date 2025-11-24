@@ -2,7 +2,6 @@
 
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
-// import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import cloudinary from "@/lib/cloudinary";
 import { getEmail } from "@/lib/db";
@@ -27,34 +26,47 @@ export async function updateProfile(
   const name = formData.get("name") as string;
   const bio = formData.get("bio") as string;
   const avatar = formData.get("avatar") as File;
+  const prevAvatar = formData.get("prevAvatar") as string;
+  const nationality = formData.get("nationality") as string;
 
   const result = ProfileSchema.safeParse({ name, bio, avatar });
-
   if (!result.success) {
     return { errors: z.flattenError(result.error).fieldErrors };
   }
 
-  // TODO avatar size control
-  // upload to cloudinary CDN
-  const arrayBuffer = await avatar.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
-  const base64File = `data:${avatar.type};base64,${buffer.toString("base64")}`;
-  // TODO try catch error handle
-  const uploadResult = await cloudinary.uploader.upload(base64File, {
-    folder: "footprints_avatars",
-  });
-  // todo delete old avatar
-  // const destroyResult = await cloudinary.uploader.destroy('public_id');
-
   const email = await getEmail();
+  // TODO avatar size control
 
-  await prisma.users.update({
-    where: { email },
-    data: { name, bio, avatar: uploadResult.secure_url },
-  });
+  if (avatar.size !== 0) {
+    // upload to cloudinary CDN
+    const arrayBuffer = await avatar.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    const base64File = `data:${avatar.type};base64,${buffer.toString(
+      "base64"
+    )}`;
+    const uploadResult = await cloudinary.uploader.upload(base64File, {
+      folder: "footprints_avatars",
+    });
+    // delete previous avatar
+    if (prevAvatar) {
+      const arr = prevAvatar.split("/");
+      const publicId = arr[7] + "/" + arr[8]?.split(".")[0];
+      await cloudinary.uploader.destroy(publicId);
+    }
+
+    await prisma.users.update({
+      where: { email },
+      data: { name, bio, avatar: uploadResult.secure_url, nationality },
+    });
+  } else {
+    // no upload file
+    await prisma.users.update({
+      where: { email },
+      data: { name, bio, nationality },
+    });
+  }
 
   revalidatePath("/profile");
-
   return {
     success: true,
     msg: "update success",

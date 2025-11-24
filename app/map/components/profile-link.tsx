@@ -24,7 +24,7 @@ export default function ProfileLink({
             src={avatar}
             email={email}
             name={name}
-            className="shadow-[0_8px_30px_rgb(0,0,0,0.23)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.32)] cursor-pointer"
+            className="shadow-[0_8px_30px_rgb(0,0,0,0.24)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.32)] cursor-pointer"
           />
         </TooltipTrigger>
         <TooltipContent side="right">

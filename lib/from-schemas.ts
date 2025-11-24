@@ -24,15 +24,4 @@ export const ProfileSchema = z.object({
     .string()
     .max(200, "The bio must be shorter than 200 characters.")
     .optional(),
-  avatar: z
-    .instanceof(File)
-    .refine(
-      (file) => file.size <= 1 * 1024 * 1024,
-      "The file size should not be more than 5MB."
-    )
-    .refine(
-      (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
-      `Only support JPG, PNG, WEBP`
-    )
-    .optional(),
 });

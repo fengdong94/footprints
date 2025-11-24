@@ -1640,13 +1640,6 @@ const flags: Record<
     image:
       "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TV.svg",
   },
-  TW: {
-    name: "Taiwan",
-    emoji: "🇹🇼",
-    unicode: "U+1F1F9 U+1F1FC",
-    image:
-      "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/TW.svg",
-  },
   TZ: {
     name: "Tanzania",
     emoji: "🇹🇿",

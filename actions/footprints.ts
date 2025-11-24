@@ -110,7 +110,7 @@ export type Top10VisitedUsersState = {
   data?: {
     count: number;
     name?: string | null | undefined;
-    email?: string | undefined;
+    email: string;
     avatar?: string | null | undefined;
     bio?: string | null | undefined;
     nationality?: string | null | undefined;
@@ -147,7 +147,7 @@ export async function getTop10VisitedUsers(): Promise<Top10VisitedUsersState> {
     const data = (topUsers as TopUsers).map(({ user_email, _count }) => {
       const user = detailsMap.get(user_email);
       return {
-        ...user,
+        ...user!,
         count: _count.user_email,
       };
     });

@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useContext } from "react";
-import Image from "next/image";
 import { getFlagByISO } from "@/lib/utils";
+import UserAvatar from "@/components/ui/user-avatar";
 import { CountryListContext } from "../../context";
 
 type RowData = {
   count: number;
   name?: string | null | undefined;
-  email?: string | undefined;
+  email: string;
   avatar?: string | null | undefined;
   bio?: string | null | undefined;
   nationality?: string | null | undefined;
@@ -28,7 +28,7 @@ const getRankStyles = (rank: number) => {
 };
 
 const Row = ({
-  rowData: { avatar, name, bio, nationality, count },
+  rowData: { avatar, name, bio, nationality, count, email },
   index,
 }: {
   rowData: RowData;
@@ -54,14 +54,14 @@ const Row = ({
       <div className="flex items-center justify-start">
         <span
           className={`
-            w-7 h-7 flex items-center justify-center rounded-full text-sm transition-all duration-300
+            w-6 h-6 flex items-center justify-center rounded-full text-xs transition-all duration-300
             ${rankStyles}
           `}
         >
           {isWinner ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4"
+              className="w-3 h-3"
               width="24"
               height="24"
               viewBox="0 0 24 24"
@@ -84,17 +84,12 @@ const Row = ({
         </span>
       </div>
       <div className="flex flex-col items-center justify-center space-y-0">
-        <Image
-          // todo default avater component (include Image and fullback)?, also in profile
-          // TODO normal photo size problem
-          src={avatar || ""}
-          alt="avatar"
-          width={44}
-          height={44}
-          className={`
-            rounded-full object-cover border-2 
-            ${isWinner ? "border-blue-500 shadow-md" : "border-gray-200"}
-          `}
+        <UserAvatar
+          src={avatar}
+          name={name}
+          email={email}
+          size={36}
+          className="shadow-md"
         />
         <span
           className={`
