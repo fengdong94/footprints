@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, startTransition } from "react";
-import { ListOrdered } from "lucide-react";
+import { ListOrdered, X } from "lucide-react";
 import {
   Drawer,
   DrawerClose,
@@ -60,7 +60,12 @@ export default function Leaderboard() {
           <RankList data={data} />
           {/* TODO visited continents ranking */}
         </ScrollArea>
-        <DrawerClose>{/* TODO close icon */}</DrawerClose>
+        <DrawerClose>
+          <X
+            size={24}
+            className="absolute text-gray-500 top-4 right-4 cursor-pointer"
+          />
+        </DrawerClose>
       </DrawerContent>
     </Drawer>
   );

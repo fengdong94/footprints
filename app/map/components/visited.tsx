@@ -1,6 +1,6 @@
 "use client";
 
-import { Footprints } from "lucide-react";
+import { Footprints, X } from "lucide-react";
 import {
   Drawer,
   DrawerClose,
@@ -35,7 +35,9 @@ export default function Visited({ countries }: VisitedProps) {
           <DrawerTitle className="text-lg mb-4">Visited Countries</DrawerTitle>
           <CountryList countryList={countries} />
         </ScrollArea>
-        <DrawerClose>{/* TODO close icon */}</DrawerClose>
+        <DrawerClose>
+          <X size={24} className="absolute text-gray-500 top-4 right-4 cursor-pointer" />
+        </DrawerClose>
       </DrawerContent>
     </Drawer>
   );

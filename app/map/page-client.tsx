@@ -5,7 +5,7 @@ import { Country, Footprint, User } from "@/lib/types";
 import { CountryListContext } from "./context";
 import {
   Map,
-  PopUp,
+  CountryDrawer,
   CountrySelector,
   Tools,
   Visited,
@@ -61,9 +61,11 @@ export default function Footprints({ footprints, user }: FootprintsProps) {
       />
       <Tools mapRef={mapRef} />
       <CountrySelector value={selectedCountry} onChange={setSelectedCountry} />
-      {selectedCountry && (
-        <PopUp selectedCountry={selectedCountry} footprints={footprints} />
-      )}
+      <CountryDrawer
+        selectedCountry={selectedCountry}
+        footprints={footprints}
+        setSelectedCountry={setSelectedCountry}
+      />
       <Visited countries={visitedCountries} />
       <Wishlist countries={wishlistCountries} />
       <Achievement countries={visitedCountries} />

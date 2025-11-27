@@ -22,6 +22,9 @@ model footprints {
   user_email   String
   country_name String
   type         type_status
+  date         String?
+  photos       String[]
+  stories      String?
   users        users       @relation(fields: [user_email], references: [email], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([user_email, country_name])

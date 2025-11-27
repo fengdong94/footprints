@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
+import cloudinary from "@/lib/cloudinary";
 import { getEmail } from "@/lib/db";
 import { Footprint } from "@/lib/types";
 
@@ -10,6 +11,7 @@ export type State = {
   msg?: string;
 };
 
+// TODO switch to wishlist, delete travel memory?
 export async function addFootprint(
   prevState: State,
   data: {
@@ -165,3 +167,66 @@ export async function getTop10VisitedUsers(): Promise<Top10VisitedUsersState> {
     };
   }
 }
+
+export async function updateTravelMemory(
+  prevState: State,
+  data: {
+    countryName: string;
+    date: string;
+    photos: string[];
+    stories: string;
+  }
+): Promise<State> {
+  const email = await getEmail();
+  const { countryName, date, photos, stories } = data;
+
+  // check if footprint of this country has already existed
+  const footprint = await prisma.footprints.findFirst({
+    where: { user_email: email, country_name: countryName },
+  });
+  if (!footprint) {
+    return { success: false, msg: "This footprint does not exist." };
+  }
+
+  try {
+    const uploadResAll = await uploadMultipleImages(photos);
+    const photosUrl = uploadResAll?.map((res) => res.secure_url);
+
+    await prisma.footprints.update({
+      where: {
+        user_email_country_name: {
+          user_email: footprint.user_email,
+          country_name: footprint.country_name,
+        },
+      },
+      data: {
+        date,
+        photos: photosUrl,
+        stories,
+      },
+    });
+    revalidatePath("/map");
+    return { success: true };
+  } catch (error) {
+    console.log("error", error);
+    return {
+      success: false,
+      msg: "Update travel memory failed, please try again later.",
+    };
+  }
+}
+
+// TODO delete previous photos
+// use promise.all to upload multiple images
+const uploadMultipleImages = async (images: string[]) => {
+  try {
+    const uploadPromises = images.map((image) => {
+      return cloudinary.uploader.upload(image, {
+        folder: "footprints_travel_memory",
+      });
+    });
+    return await Promise.all(uploadPromises);
+  } catch (error) {
+    console.error("Upload failed:", error);
+  }
+};

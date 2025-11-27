@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, Fragment } from "react";
-import { Award } from "lucide-react";
+import { Award, X } from "lucide-react";
 import {
   Drawer,
   DrawerClose,
@@ -80,7 +80,11 @@ export default function Achievement({ countries }: AchievementProps) {
     <Drawer direction="left">
       <DrawerTrigger asChild>
         <div className="fixed top-3/6 left-3">
-          <IconButton icon={<Award />} label="badges" styleClass="text-yellow-500 bg-yellow-50" />
+          <IconButton
+            icon={<Award />}
+            label="badges"
+            styleClass="text-yellow-500 bg-yellow-50"
+          />
         </div>
       </DrawerTrigger>
       <DrawerContent>
@@ -97,7 +101,12 @@ export default function Achievement({ countries }: AchievementProps) {
             </Fragment>
           ))}
         </ScrollArea>
-        <DrawerClose>{/* TODO close icon */}</DrawerClose>
+        <DrawerClose>
+          <X
+            size={24}
+            className="absolute text-gray-500 top-4 right-4 cursor-pointer"
+          />
+        </DrawerClose>
       </DrawerContent>
     </Drawer>
   );

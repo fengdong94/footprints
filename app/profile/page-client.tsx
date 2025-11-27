@@ -10,6 +10,7 @@ import {
 import { Edit } from "lucide-react";
 import { toast } from "sonner";
 import { updateProfile, State } from "@/actions/user";
+import { Spinner } from "@/components/ui/spinner";
 import UserAvatar from "@/components/ui/user-avatar";
 import { User } from "@/lib/types";
 import MapLink from "./components/map-link";
@@ -112,6 +113,15 @@ export default function PageClient({
               <div>
                 <label
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  htmlFor="nationality"
+                >
+                  Nationality
+                </label>
+                <CountrySelector value={country} onChange={setCountry} />
+              </div>
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                   htmlFor="bio"
                 >
                   Bio
@@ -128,22 +138,20 @@ export default function PageClient({
                   <p className="mt-2 text-sm text-red-600">{errors.bio[0]}</p>
                 )}
               </div>
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  htmlFor="nationality"
-                >
-                  Nationality
-                </label>
-                <CountrySelector value={country} onChange={setCountry} />
-              </div>
-              <div className="flex justify-end pt-4">
+              <div className="flex justify-start pt-4">
                 <button
-                  className="bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:ring-offset-background-light dark:focus:ring-offset-background-dark transition-colors cursor-pointer"
+                  className="bg-primary w-48 text-white font-bold py-3 px-6 rounded-lg hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:ring-offset-background-light dark:focus:ring-offset-background-dark transition-colors cursor-pointer flex items-center justify-center"
                   type="submit"
                   disabled={pending}
                 >
-                  {pending ? "Saving Changes ..." : "Save Changes"}
+                  {pending ? (
+                    <>
+                      <Spinner className="mr-2" />
+                      Saving
+                    </>
+                  ) : (
+                    "Save"
+                  )}
                 </button>
               </div>
             </div>
