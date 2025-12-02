@@ -7,7 +7,8 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "test": "jest"
+    "test": "jest",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "@prisma/client": "^6.16.3",
@@ -56,6 +57,7 @@
     "@types/nodemailer": "^6.4.20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cypress": "^15.7.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
     "jest": "^30.2.0",
