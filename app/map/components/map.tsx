@@ -3,7 +3,12 @@
 import mapboxgl from "mapbox-gl";
 import { useEffect, useContext, RefObject } from "react";
 import { Country, Footprint } from "@/lib/types";
-import { useSetCountryList, useHighlight, useClick, useFootprints } from "../hooks";
+import {
+  useSetCountryList,
+  useHighlight,
+  useClick,
+  useFootprints,
+} from "../hooks";
 import { CountryListContext } from "../context";
 
 type MapProps = {
@@ -21,7 +26,8 @@ export default function Map({
   footprints,
   mapRef,
 }: MapProps) {
-  const { setCountryList, countryList, countryMap } = useContext(CountryListContext);
+  const { setCountryList, countryList, countryMap } =
+    useContext(CountryListContext);
 
   // initialize the map
   useEffect(() => {
@@ -51,7 +57,7 @@ export default function Map({
   // useHover(mapRef);
   useClick(mapRef, countryList, setSelectedCountry);
   useHighlight(mapRef, selectedCountry, prevCountry);
-  useFootprints(mapRef, footprints, countryMap)
+  useFootprints(mapRef, footprints, countryMap);
 
   return <div id="map" style={{ height: "100vh" }}></div>;
 }

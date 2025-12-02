@@ -21,16 +21,17 @@ export async function addFootprint(
 ): Promise<State> {
   const email = await getEmail();
   const { countryName, type } = data;
-
   // check if footprint of this country has already existed
   const footprint = await prisma.footprints.findFirst({
     where: { user_email: email, country_name: countryName },
   });
+  // if exists, check if the type is same
+  // if the type is same, return error msg: This footprint has already existed
+  // if the type is different, update the footprint
   if (footprint) {
     if (footprint.type === type) {
       return { success: false, msg: "This footprint has already existed." };
     }
-    // if the type is different, update the footprint
     try {
       await prisma.footprints.update({
         where: {
@@ -51,9 +52,8 @@ export async function addFootprint(
       };
     }
   }
-
-  // if footprint of this country has not already existed, create a new one
   try {
+    // if footprint of this country does not exist, create a new one
     await prisma.footprints.create({
       data: {
         country_name: countryName,
@@ -179,19 +179,19 @@ export async function updateTravelMemory(
 ): Promise<State> {
   const email = await getEmail();
   const { countryName, date, photos, stories } = data;
-
   // check if footprint of this country has already existed
   const footprint = await prisma.footprints.findFirst({
     where: { user_email: email, country_name: countryName },
   });
+  // if does not exist, return error msg: "This footprint does not exist."
   if (!footprint) {
     return { success: false, msg: "This footprint does not exist." };
   }
-
   try {
+    // upload all images to cloudinary and get urls
     const uploadResAll = await uploadMultipleImages(photos);
     const photosUrl = uploadResAll?.map((res) => res.secure_url);
-
+    // update the footprint data in database
     await prisma.footprints.update({
       where: {
         user_email_country_name: {
