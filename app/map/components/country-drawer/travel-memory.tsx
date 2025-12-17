@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, startTransition, useActionState, useEffect } from "react";
+import { useState, useActionState, useEffect } from "react";
 import { Pencil, Save } from "lucide-react";
 import { toast } from "sonner";
 import { updateTravelMemory, State } from "@/actions/footprints";
@@ -34,6 +34,7 @@ export default function TravelMemory({
     initialState
   );
   useEffect(() => {
+    if (!state.hasOwnProperty("success")) return;
     if (state.success) {
       toast.success("Update travel memory successfully.");
     } else {

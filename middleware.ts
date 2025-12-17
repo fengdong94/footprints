@@ -22,7 +22,6 @@ export function middleware(request: NextRequest) {
     if (!token) {
       const url = request.nextUrl.clone();
       url.pathname = "/login";
-      // TODO after loging in, redirect to original page
       // url.searchParams.set('callbackUrl', pathname);
       return NextResponse.redirect(url);
     }

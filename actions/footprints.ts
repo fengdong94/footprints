@@ -11,7 +11,6 @@ export type State = {
   msg?: string;
 };
 
-// TODO switch to wishlist, delete travel memory?
 export async function addFootprint(
   prevState: State,
   data: {

@@ -35,7 +35,7 @@ export default function Map({
       "pk.eyJ1IjoiZmVuZ2RvbmciLCJhIjoiY21oZmY4amVwMDRrdjJqczc2YnB6d2M3bCJ9.fGVMghfQ1iBc7KGon0oIFg";
     mapRef.current = new mapboxgl.Map({
       container: "map",
-      style: "mapbox://styles/fengdong/cmi9f8eqx00co01s91tvuhq78",
+      style: "mapbox://styles/fengdong/cmj9i5oep002r01sa7z2l1o4d",
       center: [20, 26],
       zoom: 1.5,
       projection: "mercator", // 2D: mercator, 3D: globe
@@ -53,11 +53,9 @@ export default function Map({
   }, [mapRef]);
 
   useSetCountryList(mapRef, setCountryList);
-  // TODO
-  // useHover(mapRef);
   useClick(mapRef, countryList, setSelectedCountry);
-  useHighlight(mapRef, selectedCountry, prevCountry);
-  useFootprints(mapRef, footprints, countryMap);
+  useHighlight(mapRef, selectedCountry);
+  useFootprints(mapRef, footprints, countryMap, countryList);
 
   return <div id="map" style={{ height: "100vh" }}></div>;
 }

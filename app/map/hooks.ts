@@ -47,20 +47,10 @@ export function useSetCountryList(
 // highlight and fly to the selected country; unhighlight previous selected country
 export function useHighlight(
   mapRef: RefObject<mapboxgl.Map | null>,
-  selectedCountry?: Country,
-  prevCountry?: Country
+  selectedCountry?: Country
 ) {
   useEffect(() => {
     if (selectedCountry?.id) {
-      mapRef.current!.setFeatureState(
-        {
-          source: "composite",
-          sourceLayer: "country_boundaries",
-          id: selectedCountry.id,
-        },
-        { selected: true }
-      );
-
       const centerCoordinates = centroid(selectedCountry.geometry).geometry
         .coordinates;
       mapRef.current?.flyTo({
@@ -75,17 +65,7 @@ export function useHighlight(
       //   maxZoom: 4,
       // });
     }
-    if (prevCountry?.id) {
-      mapRef.current!.setFeatureState(
-        {
-          source: "composite",
-          sourceLayer: "country_boundaries",
-          id: prevCountry.id,
-        },
-        { selected: false }
-      );
-    }
-  }, [mapRef, prevCountry?.id, selectedCountry]);
+  }, [mapRef, selectedCountry]);
 }
 
 // set click event listener
@@ -99,7 +79,6 @@ export function useClick(
     // select a country form map
     mapRef.current!.on("click", "country-boundaries", (e) => {
       const features = mapRef.current!.queryRenderedFeatures(e.point);
-      console.log("clicked country features", features);
       features.forEach((feature) => {
         const curCountry = countryList.find(({ id }) => id === feature.id);
         setSelectedCountry(curCountry);
@@ -108,46 +87,26 @@ export function useClick(
   }, [mapRef, countryList, setSelectedCountry]);
 }
 
-// set hover event listener
-export function useHover(mapRef: RefObject<mapboxgl.Map | null>) {
-  useEffect(() => {
-    mapRef.current!.on("mousemove", "country-boundaries", (e) => {
-      console.log("mousemove", e, e.features);
-      if (e.features?.length) {
-        mapRef.current!.setFeatureState(
-          {
-            source: "country-boundaries",
-            sourceLayer: "country_boundaries",
-            id: e.features[0].id!,
-          },
-          { hover: true }
-        );
-      }
-    });
-
-    // mapRef.current!.on("mouseleave", "country-boundaries", (e) => {
-    //   console.log("mouseleave", e, e.features);
-    //   if (e.features?.length) {
-    //     mapRef.current?.setFeatureState(
-    //       {
-    //         source: "states",
-    //         sourceLayer: "country_boundaries",
-    //         id: e.features[0].id!,
-    //       },
-    //       { hover: false }
-    //     );
-    //   }
-    // });
-  }, [mapRef]);
-}
-
 // highlight footprints (visited & wishlist)
 export function useFootprints(
   mapRef: RefObject<mapboxgl.Map | null>,
   footprints: Footprint[],
-  countryMap: Record<string, Country>
+  countryMap: Record<string, Country>,
+  countryList: Country[]
 ) {
   useEffect(() => {
+    // clear all highlight
+    countryList.forEach(({ id }) => {
+      mapRef.current!.setFeatureState(
+        {
+          source: "composite",
+          sourceLayer: "country_boundaries",
+          id: id!,
+        },
+        { visited: false, wishlist: false }
+      );
+    });
+    // set highlight to footprints
     footprints.forEach(({ country_name, type }) => {
       if (countryMap[country_name]?.id) {
         mapRef.current!.setFeatureState(
@@ -156,10 +115,9 @@ export function useFootprints(
             sourceLayer: "country_boundaries",
             id: countryMap[country_name].id,
           },
-          // TODO when update another type should be set to false
           { [type]: true }
         );
       }
     });
-  }, [countryMap, footprints, mapRef]);
+  }, [countryMap, footprints, mapRef, countryList]);
 }

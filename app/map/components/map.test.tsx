@@ -72,7 +72,7 @@ describe("Map Component", () => {
     jest.clearAllMocks();
   });
 
-  it("calls useSetCountryList on map load", () => {
+  it("calls hooks on map load", () => {
     render(
       <Map
         selectedCountry={undefined}
