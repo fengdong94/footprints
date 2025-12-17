@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  email       String       @id
+  password    String
+  name        String?
+  avatar      String?
+  bio         String?
+  nationality String?
+  footprints  footprints[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model footprints {
+  user_email   String
+  country_name String
+  type         type_status
+  date         String?
+  photos       String[]
+  stories      String?
+  users        users       @relation(fields: [user_email], references: [email], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([user_email, country_name])
+}
+
+enum type_status {
+  visited
+  wishlist
+}
